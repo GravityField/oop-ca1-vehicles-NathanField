@@ -1,5 +1,8 @@
 package org.example;
 //Nathan Field
+
+import java.time.LocalDate;
+
 /**
  * This Vehicle Bookings Management Systems manages the booking of Vehicles
  * by Passengers.
@@ -31,6 +34,16 @@ public class App
         VehicleManager vehicleManager = new VehicleManager("vehicles.txt");
         System.out.println("List of all Vehicles:");
         vehicleManager.displayAllVehicles();
+        System.out.println();
+        Vehicle v = vehicleManager.findVehicleByRegNumber("181MN6538107");
+        if(v != null)
+        {
+            System.out.println(v);
+        }
+//
+//        Booking b1 = new Booking(0,0,v.getId(), LocalDate.now(), LocationGPS.getDepotGPSLocation(), 6.4060, 6.1902, 200);
+
+
 
         System.out.println("Program exiting... Goodbye");
     }
