@@ -34,17 +34,22 @@ public class App
         VehicleManager vehicleManager = new VehicleManager("vehicles.txt");
         System.out.println("List of all Vehicles:");
         vehicleManager.displayAllVehicles();
-        System.out.println();
+
+        System.out.println("Find Vehicle by Registration Number");
+
         Vehicle v = vehicleManager.findVehicleByRegNumber("181MN6538107");
         if(v != null)
         {
             System.out.println(v);
         }
-//
-//        Booking b1 = new Booking(0,0,v.getId(), LocalDate.now(), LocationGPS.getDepotGPSLocation(), 6.4060, 6.1902, 200);
 
+//        Booking b1 = new Booking(IdGenerator.getNext  ,0,v.getId(), LocalDate.now(), LocationGPS.getDepotGPSLocation(), 6.4060, 6.1902, 200);
 
-
+        passengerStore.addPassenger("Michael Flint","mf@gmail.com","0834121314", 0,0);
+        passengerStore.displayAllPassengers();
+        System.out.println("");
+        passengerStore.addPassenger("Michael Flint","mf@gmail.com","0834121314", 0,0);
+        passengerStore.displayAllPassengers();
         System.out.println("Program exiting... Goodbye");
     }
 }
