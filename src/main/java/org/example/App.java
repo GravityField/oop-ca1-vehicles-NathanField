@@ -47,8 +47,20 @@ public class App
 
         passengerStore.addPassenger("Michael Flint","mf@gmail.com","0834121314", 0,0);
         passengerStore.displayAllPassengers();
-        System.out.println("");
+        System.out.println(" ");
         passengerStore.addPassenger("Michael Flint","mf@gmail.com","0834121314", 0,0);
+        passengerStore.displayAllPassengers();
+
+        System.out.println("Print 1 passenger");
+
+        passengerStore.printPassenger(101);
+        System.out.println("Delete Passenger");
+        passengerStore.deletePassenger(101);
+
+        passengerStore.displayAllPassengers();
+
+        System.out.println("Edit Passenger");
+        passengerStore.editPassenger(102, "","","",1,1);
         passengerStore.displayAllPassengers();
         System.out.println("Program exiting... Goodbye");
     }

@@ -25,24 +25,6 @@ public class PassengerStore {
         }
     }
 
-    public void addPassenger(String name, String email, String phone,
-                             double latitude, double longitude)
-    {
-        Passenger P = new Passenger(name,email,phone,latitude,longitude);
-        boolean found = false;
-        for(Passenger p: passengerList) {
-            if (p.equals(P)) {
-                found = true;
-                break;
-            }
-
-        }
-        if(!found)
-        {
-            passengerList.add(P);
-        }
-
-    }
 
     /**
      * Read Passenger records from a text file and create and add Passenger
@@ -75,5 +57,69 @@ public class PassengerStore {
     }
 
     // TODO - see functional spec for details of code to add
+
+    public void addPassenger(String name, String email, String phone,
+                             double latitude, double longitude)
+    {
+        Passenger P = new Passenger(name,email,phone,latitude,longitude);
+        boolean found = false;
+        for(Passenger p: passengerList) {
+            if (p.equals(P)) {
+                found = true;
+                break;
+            }
+
+        }
+        if(!found)
+        {
+            passengerList.add(P);
+        }
+
+    }
+    public void deletePassenger(int id)
+    {
+        for(Passenger p: passengerList) {
+            if (p.getId() == id) {
+                passengerList.remove(p);
+                break;
+            }
+
+        }
+
+    }
+    public void editPassenger(int id, String name, String email, String phone,
+                             double latitude, double longitude)
+    {
+        boolean found = false;
+        for(Passenger p: passengerList) {
+            if (p.getId() == id) {
+                found = true;
+                p.setName(name);
+                p.setEmail(email);
+                p.setPhone(phone);
+                p.setLocation(latitude, longitude);
+
+                break;
+            }
+
+        }
+        if(!found)
+        {
+            System.out.println("not found");
+        }
+
+    }
+    public void printPassenger(int id)
+    {
+        for(Passenger p: passengerList) {
+            if (p.getId() == id){
+                System.out.println(p);
+            }
+        }
+
+    }
+
+
+
 
 } // end class
