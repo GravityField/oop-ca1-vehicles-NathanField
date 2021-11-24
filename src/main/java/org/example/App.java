@@ -1,7 +1,9 @@
 package org.example;
 //Nathan Field
 
-import java.time.LocalDate;
+import javax.xml.stream.Location;
+import java.time.LocalDateTime;
+
 
 /**
  * This Vehicle Bookings Management Systems manages the booking of Vehicles
@@ -35,15 +37,19 @@ public class App
         System.out.println("List of all Vehicles:");
         vehicleManager.displayAllVehicles();
 
-        System.out.println("Find Vehicle by Registration Number");
+        BookingManager bookingManager = new BookingManager();
 
+        System.out.println("Find Vehicle by Registration Number");
         Vehicle v = vehicleManager.findVehicleByRegNumber("181MN6538107");
         if(v != null)
         {
             System.out.println(v);
+
         }
 
-//        Booking b1 = new Booking(IdGenerator.getNext  ,0,v.getId(), LocalDate.now(), LocationGPS.getDepotGPSLocation(), 6.4060, 6.1902, 200);
+        System.out.println();
+
+
 
         passengerStore.addPassenger("Michael Flint","mf@gmail.com","0834121314", 0,0);
         passengerStore.displayAllPassengers();
@@ -55,13 +61,45 @@ public class App
 
         passengerStore.printPassenger(101);
         System.out.println("Delete Passenger");
-        passengerStore.deletePassenger(101);
+        passengerStore.deletePassenger("Michael Flint","");
 
         passengerStore.displayAllPassengers();
 
         System.out.println("Edit Passenger");
-        passengerStore.editPassenger(102, "","","",1,1);
+        passengerStore.editPassenger("Alice", "na@gmail.com","",0.0,1.0);
         passengerStore.displayAllPassengers();
+
+
+
+
+
+        Vehicle v1 = vehicleManager.findVehicleByRegNumber("181MN6538107");
+        if(v1 != null)
+        {
+
+            bookingManager.addBooking(101,102, v1.getId(), 2021,11,24,12,27,10,54.0, 50.0,20.00, 20.00, 200);
+        }
+
+        System.out.println();
+
+
+
+
+        System.out.println("List of all bookings:");
+        bookingManager.displayAllBookings();
+        System.out.println();
+
+
+        bookingManager.deleteBooking(101);
+        System.out.println("List of all bookings:");
+        bookingManager.displayAllBookings();
+        System.out.println();
+
+
+
+
+
+
         System.out.println("Program exiting... Goodbye");
     }
 }
