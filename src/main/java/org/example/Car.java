@@ -31,7 +31,12 @@ public class Car extends Vehicle
                 year,month,day,
                 mileage,latitude,longitude);
     }
-
+    @Override
+    public String toString() {
+        return "Car{" +
+                "numberOfSeats=" + numberOfSeats +
+                "} " + super.toString();
+    }
 
      
 }

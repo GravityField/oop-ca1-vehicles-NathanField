@@ -50,6 +50,15 @@ public class VehicleManager {
                             mileage, latitude, longitude,
                             loadSpace));
                 }
+                else if (type.equalsIgnoreCase("Car")) {
+                    // construct a Car object and add it to the passenger list
+                    vehicleList.add(new Car(id, type, make, model, milesPerKwH,
+                            registration, costPerMile,
+                            year, month, day,
+                            mileage, latitude, longitude,
+                            loadSpace));
+                    //number of seats instead of loadspace
+                }
             }
             sc.close();
 
