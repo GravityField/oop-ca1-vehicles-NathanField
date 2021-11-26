@@ -31,6 +31,15 @@ public class Car extends Vehicle
                 year,month,day,
                 mileage,latitude,longitude);
     }
+
+    public int getNumberOfSeats() {
+        return numberOfSeats;
+    }
+
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
+    }
+
     @Override
     public String toString() {
         return "Car{" +

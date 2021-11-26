@@ -57,7 +57,7 @@ public class VehicleManager {
                             year, month, day,
                             mileage, latitude, longitude,
                             loadSpace));
-                    //number of seats instead of loadspace
+                    //loadspace is passed in for number of seats
                 }
             }
             sc.close();
@@ -68,16 +68,35 @@ public class VehicleManager {
     }
 
     //TODO add more functionality as per spec.
-
-    public Vehicle findVehicleByRegNumber(String registrationNumber) {
-        for (Vehicle v : vehicleList)
-            if(v.getRegistration().equalsIgnoreCase(registrationNumber)) {
-                return v;
+    public ArrayList<Vehicle> findVehiclesByRegistration(String reg) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle v : vehicleList) {
+            if (v.getRegistration().equalsIgnoreCase(reg)){
+                vehicles.add(v);
             }
-        return null;
-
-
+        }
+        return vehicles;
     }
+
+    public ArrayList<Vehicle> findVehiclesByType(String type) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle v : vehicleList) {
+            if (v.getType().equalsIgnoreCase(type)) {
+                vehicles.add(v);
+            }
+        }
+        return vehicles;
+    }
+
+//    public Vehicle findVehicleByRegNumber(String registrationNumber) {
+//        for (Vehicle v : vehicleList)
+//            if(v.getRegistration().equalsIgnoreCase(registrationNumber)) {
+//                return v;
+//            }
+//        return null;
+//
+//
+//    }
 
 
 

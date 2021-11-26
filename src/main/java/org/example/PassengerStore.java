@@ -59,7 +59,7 @@ public class PassengerStore {
         }
     }
 
-    public void addPassenger(String name, String email, String phone,
+    public boolean addPassenger(String name, String email, String phone,
                              double latitude, double longitude)
     {
         Passenger P = new Passenger(name,email,phone,latitude,longitude);
@@ -75,7 +75,7 @@ public class PassengerStore {
         {
             passengerList.add(P);
         }
-
+        return found;
     }
     public void deletePassenger(String name, String email)
     {
@@ -110,16 +110,16 @@ public class PassengerStore {
         }
 
     }
-    public void printPassenger(int id)
-    {
-        for(Passenger p: passengerList) {
-            if (p.getId() == id){
-                System.out.println(p);
+
+    public Passenger findPassengerByName(String Name) {
+        for (Passenger p : passengerList)
+            if(p.getName().equalsIgnoreCase(Name)) {
+                return p;
             }
-        }
+        return null;
+
 
     }
-
 
 
 
