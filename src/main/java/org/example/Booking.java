@@ -15,13 +15,14 @@ class Booking
 
     //TODO - see specification
 
-    public Booking(int bookingId, int passengerId, int vehicleId, LocalDateTime bookingDateTime, LocationGPS startLocation, LocationGPS endLocation, double cost) {
+    public Booking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+                   double latStart, double longStart,double latEnd, double longEnd, double cost) {
         this.bookingId = bookingId;
         this.passengerId = passengerId;
         this.vehicleId = vehicleId;
-        this.bookingDateTime = bookingDateTime;
-        this.startLocation = startLocation;
-        this.endLocation = endLocation;
+        this.bookingDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
+        this.startLocation = new LocationGPS(latStart,longStart);
+        this.endLocation = new LocationGPS(latEnd,longEnd);
         this.cost = cost;
     }
 
