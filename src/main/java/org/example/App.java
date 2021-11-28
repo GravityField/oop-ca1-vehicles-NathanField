@@ -186,6 +186,16 @@ import java.util.*;
                                 else
                                     System.out.println("Found Vehicle: \n" + vehicles.toString());
                                 break;
+                            case FIND_BY_REGISTRATION:
+                                System.out.println("Find Vehicles by Registration");
+                                System.out.println("Enter Vehicle Registration: ");
+                                String registration = keyboard.nextLine();
+                                vehicles = vehicleManager.findVehiclesByRegistration(registration);
+                                if (vehicles == null)
+                                    System.out.println("No Vehicles matching the registration \"" + registration + "\"");
+                                else
+                                    System.out.println("Found Vehicle: \n" + vehicles.toString());
+                                break;
                             case EXIT:
                                 System.out.println("Exit Menu option chosen");
                                 break;
