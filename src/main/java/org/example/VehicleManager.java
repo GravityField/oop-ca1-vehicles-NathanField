@@ -1,7 +1,9 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,11 +43,9 @@ public class VehicleManager {
                 int mileage = sc.nextInt();
                 double latitude = sc.nextDouble();  // Depot GPS location
                 double longitude = sc.nextDouble();
-                int loadSpace = sc.nextInt();
-
-                if (type.equalsIgnoreCase("Van") ||
-                        type.equalsIgnoreCase("Truck")) {
-                    // construct a Van object and add it to the passenger list
+                if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck"))
+                {
+                    double loadSpace = sc.nextDouble();
                     vehicleList.add(new Van(id, type, make, model, milesPerKwH,
                             registration, costPerMile,
                             year, month, day,
@@ -53,13 +53,15 @@ public class VehicleManager {
                             loadSpace));
                 }
                 else if (type.equalsIgnoreCase("Car")) {
+                    int numberOfSeats = sc.nextInt();
+
                     // construct a Car object and add it to the passenger list
                     vehicleList.add(new Car(id, type, make, model, milesPerKwH,
                             registration, costPerMile,
                             year, month, day,
                             mileage, latitude, longitude,
-                            loadSpace));
-                    //loadspace is passed in for number of seats
+                            numberOfSeats));
+
                 }
             }
             sc.close();
@@ -69,7 +71,89 @@ public class VehicleManager {
         }
     }
 
+    public void saveVehiclesToFile(String fileName) {
+        try {
+            FileWriter vehicleWriter = new FileWriter(fileName);
+            for (Vehicle v : vehicleList) {
+
+                if (v instanceof Car) {
+                    vehicleWriter.write(
+                            v.getId() + "," +
+                                    v.getType() + "," +
+                                    v.getMake() + "," +
+                                    v.getModel() + ","
+                                    + v.getMilesPerKwH() + ","
+                                    + v.getRegistration() + ","
+                                    + v.getCostPerMile() + ","
+                                    + v.getLastServicedDate().getYear() + ","
+                                    + v.getLastServicedDate().getMonthValue() + ","
+                                    + v.getLastServicedDate().getDayOfMonth() + ","
+                                    + v.getMileage() + ","
+                                    + v.getDepotGPSLocation().getLatitude() + ","
+                                    + v.getDepotGPSLocation().getLongitude() + "," +
+                                    ((Car) v).getNumberOfSeats() +
+                                    "\n"
+                    );
+
+                } else if (v instanceof Van) {
+                    vehicleWriter.write(
+                            v.getId() + "," +
+                                    v.getType() + "," +
+                                    v.getMake() + "," +
+                                    v.getModel() + ","
+                                    + v.getMilesPerKwH() + ","
+                                    + v.getRegistration() + ","
+                                    + v.getCostPerMile() + ","
+                                    + v.getLastServicedDate().getYear() + ","
+                                    + v.getLastServicedDate().getMonthValue() + ","
+                                    + v.getLastServicedDate().getDayOfMonth() + ","
+                                    + v.getMileage() + ","
+                                    + v.getDepotGPSLocation().getLatitude() + ","
+                                    + v.getDepotGPSLocation().getLongitude() + "," +
+                                    ((Van) v).getLoadSpace() +
+                                    "\n"
+                    );
+
+                }
+            }
+            vehicleWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+
+    }
+
+
     //TODO add more functionality as per spec.
+
+
+    public void addVehicle(String type, String make, String model, double milesPerKwH,
+                           String registration, double costPerMile,
+                           int year, int month, int day,
+                           int mileage, double latitude, double longitude, int loadSpace) {
+
+
+        if (type.equalsIgnoreCase("Van") ||
+                type.equalsIgnoreCase("Truck")) {
+            // construct a Van object and add it to the passenger list
+            vehicleList.add(new Van(type, make, model, milesPerKwH,
+                    registration, costPerMile,
+                    year, month, day,
+                    mileage, latitude, longitude,
+                    loadSpace));
+        } else if (type.equalsIgnoreCase("Car")) {
+            // construct a Car object and add it to the passenger list
+            vehicleList.add(new Car(type, make, model, milesPerKwH,
+                    registration, costPerMile,
+                    year, month, day,
+                    mileage, latitude, longitude,
+                    loadSpace));
+            //loadspace is passed in for number of seats
+        }
+    }
 
     CarRegistrationComparator registrationComparator = new CarRegistrationComparator();
 
@@ -77,7 +161,7 @@ public class VehicleManager {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
 
         for (Vehicle v : vehicleList) {
-            if (v.getRegistration().equalsIgnoreCase(reg)){
+            if (v.getRegistration().equalsIgnoreCase(reg)) {
                 vehicles.add(v);
             }
         }
@@ -92,7 +176,7 @@ public class VehicleManager {
             }
         }
 
-        Collections.sort( vehicles, registrationComparator );
+        Collections.sort(vehicles, registrationComparator);
         return vehicles;
     }
 

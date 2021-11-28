@@ -32,7 +32,7 @@ import java.util.*;
                 }
 
                 //pMgr.saveToFile();
-//                saveVehicles();
+                vehicleManager.saveVehiclesToFile("vehicles.txt");
                 System.out.println("Program ending, Goodbye");
             }
 
@@ -91,20 +91,7 @@ import java.util.*;
 
             }
 
-//                public void saveVehicles() {
-//                    try {
-//                        FileWriter myWriter = new FileWriter("vehicles.txt");
-//                        myWriter.write(
-//
-//
-//                        );
-//                        myWriter.close();
-//                        System.out.println("Successfully wrote to the file.");
-//                    } catch (IOException e) {
-//                        System.out.println("An error occurred.");
-//                        e.printStackTrace();
-//                    }
-//                }
+
 
             // Sub-Menu for Passenger operations
             //
@@ -190,22 +177,77 @@ import java.util.*;
                         System.out.print("Invalid option - please enter valid details");
                     }
                 }
+            private void addVehicleMenu() {
+
+                double additional = 0;
+                Scanner keyboard = new Scanner(System.in);
+                System.out.println("Enter Type:");
+                String type = keyboard.nextLine();
+                System.out.println("Enter Make:");
+                String make = keyboard.nextLine();
+                System.out.println("Enter Model:");
+                String model = keyboard.nextLine();
+                System.out.println("Enter milesPerKwH");
+                String usersInput = keyboard.nextLine();
+                double milesPerKwH = Double.parseDouble(usersInput);
+                System.out.println("Enter Registration");
+                String registration = keyboard.nextLine();
+                System.out.println("Enter Cost Per Mile");
+                double costPerMile = keyboard.nextDouble();
+                System.out.println("Enter Last Service Year");
+                int year = keyboard.nextInt();
+                System.out.println("Enter Last Service Month");
+                int month = keyboard.nextInt();
+                System.out.println("Enter Last Service Day");
+                int day = keyboard.nextInt();
+                System.out.println("Enter Mileage");
+                int mileage = keyboard.nextInt();
+
+
+                System.out.println("Enter Latitude");
+                double latitude = keyboard.nextDouble();
+                System.out.println("Enter longitude");
+                double longitude = keyboard.nextDouble();
+
+
+                if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck") ) {
+                    System.out.println("Enter Loadspace");
+                    additional = keyboard.nextDouble();
+                }
+                else
+                {
+                    System.out.println("Enter Number of Seats");
+                    additional = keyboard.nextInt();
+
+                }
+
+                try {
+
+                    vehicleManager.addVehicle(type,make,model,milesPerKwH,registration,costPerMile,year,month,day,mileage,latitude,longitude, (int) additional);
+                    System.out.println("Vehicle added");
+
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter valid details");
+                }
+            }
 
 
 
             private void displayVehicleMenu() {
                 final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                         + "1. Show all Vehicles\n"
-                        + "2. Find Vehicle by Type\n"
-                        + "3. Find Vehicle by Registration\n"
-                        + "4. Exit\n"
+                        + "2. Add Vehicle\n"
+                        + "3. Find Vehicle by Type\n"
+                        + "4. Find Vehicle by Registration\n"
+                        + "5. Exit\n"
 
-                        + "Enter Option [1,4]";
+                        + "Enter Option [1,5]";
 
                 final int SHOW_ALL = 1;
-                final int FIND_BY_TYPE = 2;
-                final int FIND_BY_REGISTRATION = 3;
-                final int EXIT = 4;
+                final int ADD_VEHICLE = 2;
+                final int FIND_BY_TYPE = 3;
+                final int FIND_BY_REGISTRATION = 4;
+                final int EXIT = 5;
 
                 ArrayList<Vehicle>  vehicles;
 
@@ -220,6 +262,10 @@ import java.util.*;
                             case SHOW_ALL:
                                 System.out.println("Display ALL Vehicles");
                                 vehicleManager.displayAllVehicles();
+                                break;
+                            case ADD_VEHICLE:
+                                System.out.println("Add Vehicle Chosen");
+                                addVehicleMenu();
                                 break;
                             case FIND_BY_TYPE:
                                 System.out.println("Find Vehicles by Type");
