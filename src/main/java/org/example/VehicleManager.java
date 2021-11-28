@@ -3,6 +3,8 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class VehicleManager {
@@ -68,8 +70,12 @@ public class VehicleManager {
     }
 
     //TODO add more functionality as per spec.
+
+    CarRegistrationComparator registrationComparator = new CarRegistrationComparator();
+
     public ArrayList<Vehicle> findVehiclesByRegistration(String reg) {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
+
         for (Vehicle v : vehicleList) {
             if (v.getRegistration().equalsIgnoreCase(reg)){
                 vehicles.add(v);
@@ -85,20 +91,17 @@ public class VehicleManager {
                 vehicles.add(v);
             }
         }
+
+        Collections.sort( vehicles, registrationComparator );
         return vehicles;
     }
 
-//    public Vehicle findVehicleByRegNumber(String registrationNumber) {
-//        for (Vehicle v : vehicleList)
-//            if(v.getRegistration().equalsIgnoreCase(registrationNumber)) {
-//                return v;
-//            }
-//        return null;
-//
-//
-//    }
+    public static class CarRegistrationComparator implements Comparator<Vehicle> {
 
-
+        public int compare(Vehicle v1, Vehicle v2) {
+            return v1.getRegistration().compareTo(v2.getRegistration());
+        }
+    }
 
 
 }

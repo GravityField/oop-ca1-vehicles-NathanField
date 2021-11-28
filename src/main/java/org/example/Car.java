@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Comparator;
+
 public class Car extends Vehicle
 {
 
@@ -47,5 +49,5 @@ public class Car extends Vehicle
                 "} " + super.toString();
     }
 
-     
+
 }
