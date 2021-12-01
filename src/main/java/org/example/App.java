@@ -147,86 +147,7 @@ import java.util.*;
                 } while (option != EXIT);
 
             }
-            private void addPassengerMenu() {
 
-                Scanner keyboard = new Scanner(System.in);
-
-                    try {
-                        System.out.println("Enter Name:");
-                        String name = keyboard.nextLine();
-                        System.out.println("Enter Email:");
-                        String email = keyboard.nextLine();
-                        System.out.println("Enter Phone Number:");
-                        String phone = keyboard.nextLine();
-                        System.out.println("Enter Latitude");
-                        double latitude = keyboard.nextDouble();
-                        System.out.println("Enter longitude");
-                        double longitude = keyboard.nextDouble();
-                        boolean found = passengerStore.addPassenger(name, email, phone, latitude, longitude);
-                        if (!found) {
-                            System.out.println("Passenger was added");
-                        } else {
-                            System.out.println("Passenger already exists");
-                        }
-
-
-                    } catch (InputMismatchException | NumberFormatException e) {
-                        System.out.print("Invalid option - please enter valid details");
-                    }
-                }
-            private void addVehicleMenu() {
-
-                double additional;
-                Scanner keyboard = new Scanner(System.in);
-                System.out.println("Enter Type:");
-                String type = keyboard.nextLine();
-                System.out.println("Enter Make:");
-                String make = keyboard.nextLine();
-                System.out.println("Enter Model:");
-                String model = keyboard.nextLine();
-                System.out.println("Enter milesPerKwH");
-                String usersInput = keyboard.nextLine();
-                double milesPerKwH = Double.parseDouble(usersInput);
-                System.out.println("Enter Registration");
-                String registration = keyboard.nextLine();
-                System.out.println("Enter Cost Per Mile");
-                double costPerMile = keyboard.nextDouble();
-                System.out.println("Enter Last Service Year");
-                int year = keyboard.nextInt();
-                System.out.println("Enter Last Service Month");
-                int month = keyboard.nextInt();
-                System.out.println("Enter Last Service Day");
-                int day = keyboard.nextInt();
-                System.out.println("Enter Mileage");
-                int mileage = keyboard.nextInt();
-
-
-                System.out.println("Enter Latitude");
-                double latitude = keyboard.nextDouble();
-                System.out.println("Enter longitude");
-                double longitude = keyboard.nextDouble();
-
-
-                if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck") ) {
-                    System.out.println("Enter Loadspace");
-                    additional = keyboard.nextDouble();
-                }
-                else
-                {
-                    System.out.println("Enter Number of Seats");
-                    additional = keyboard.nextInt();
-
-                }
-
-                try {
-//fix incorrect casting
-                    vehicleManager.addVehicle(type,make,model,milesPerKwH,registration,costPerMile,year,month,day,mileage,latitude,longitude, (int) additional);
-                    System.out.println("Vehicle added");
-
-                } catch (InputMismatchException | NumberFormatException e) {
-                    System.out.print("Invalid option - please enter valid details");
-                }
-            }
 
 
 
@@ -345,6 +266,86 @@ import java.util.*;
                 } while (option != EXIT);
 
             }
+            private void addPassengerMenu() {
+
+                Scanner keyboard = new Scanner(System.in);
+
+                try {
+                    System.out.println("Enter Name:");
+                    String name = keyboard.nextLine();
+                    System.out.println("Enter Email:");
+                    String email = keyboard.nextLine();
+                    System.out.println("Enter Phone Number:");
+                    String phone = keyboard.nextLine();
+                    System.out.println("Enter Latitude");
+                    double latitude = keyboard.nextDouble();
+                    System.out.println("Enter longitude");
+                    double longitude = keyboard.nextDouble();
+                    boolean found = passengerStore.addPassenger(name, email, phone, latitude, longitude);
+                    if (!found) {
+                        System.out.println("Passenger was added");
+                    } else {
+                        System.out.println("Passenger already exists");
+                    }
+
+
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter valid details");
+                }
+            }
+            private void addVehicleMenu() {
+
+                double additional;
+                Scanner keyboard = new Scanner(System.in);
+                System.out.println("Enter Type:");
+                String type = keyboard.nextLine();
+                System.out.println("Enter Make:");
+                String make = keyboard.nextLine();
+                System.out.println("Enter Model:");
+                String model = keyboard.nextLine();
+                System.out.println("Enter milesPerKwH");
+                String usersInput = keyboard.nextLine();
+                double milesPerKwH = Double.parseDouble(usersInput);
+                System.out.println("Enter Registration");
+                String registration = keyboard.nextLine();
+                System.out.println("Enter Cost Per Mile");
+                double costPerMile = keyboard.nextDouble();
+                System.out.println("Enter Last Service Year");
+                int year = keyboard.nextInt();
+                System.out.println("Enter Last Service Month");
+                int month = keyboard.nextInt();
+                System.out.println("Enter Last Service Day");
+                int day = keyboard.nextInt();
+                System.out.println("Enter Mileage");
+                int mileage = keyboard.nextInt();
+
+
+                System.out.println("Enter Latitude");
+                double latitude = keyboard.nextDouble();
+                System.out.println("Enter longitude");
+                double longitude = keyboard.nextDouble();
+
+
+                if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck") ) {
+                    System.out.println("Enter Loadspace");
+                    additional = keyboard.nextDouble();
+                }
+                else
+                {
+                    System.out.println("Enter Number of Seats");
+                    additional = keyboard.nextInt();
+
+                }
+
+                try {
+//fix incorrect casting
+                    vehicleManager.addVehicle(type,make,model,milesPerKwH,registration,costPerMile,year,month,day,mileage,latitude,longitude, (int) additional);
+                    System.out.println("Vehicle added");
+
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter valid details");
+                }
+            }
             private void addBookingMenu() {
 
                 Scanner kb = new Scanner(System.in);
@@ -354,17 +355,29 @@ import java.util.*;
                     int bookingId = kb.nextInt();
                     System.out.println("Enter Passenger ID");
                     int passengerId = kb.nextInt();
+                    System.out.println("Enter Vehicle ID");
                     int vehicleId = kb.nextInt();
+                    System.out.println("Enter Booking Year");
                     int year = kb.nextInt();
+                    System.out.println("Enter Booking Month");
                     int month= kb.nextInt();
+                    System.out.println("Enter Booking Day");
                     int day= kb.nextInt();
+                    System.out.println("Enter Hour");
                     int hour = kb.nextInt();
+                    System.out.println("Enter Minute");
                     int minute = kb.nextInt();
+                    System.out.println("Enter Second");
                     int second= kb.nextInt();
+                    System.out.println("Enter Start Latitude");
                     double latStart= kb.nextDouble();
+                    System.out.println("Enter Start Longitude");
                     double longStart= kb.nextDouble();
+                    System.out.println("Enter End Latitude");
                     double latEnd= kb.nextDouble();
+                    System.out.println("Enter End Longitude");
                     double longEnd= kb.nextDouble();
+                    System.out.println("Enter Cost");
                     double cost= kb.nextDouble();
                     boolean found = bookingManager.addBooking(bookingId, passengerId, vehicleId, year,month,day, hour, minute, second,latStart,longStart,latEnd, longEnd,cost);
                     if (!found) {
