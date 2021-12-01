@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ public class BookingManager
 
     //TODO implement functionality as per specification
 
-    public void addBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
-                           double latStart, double longStart,double latEnd, double longEnd, double cost)
+    public boolean addBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+                              double latStart, double longStart, double latEnd, double longEnd, double cost)
     {
         LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
         LocationGPS locationStart = new LocationGPS(latStart,longStart);
@@ -39,6 +40,7 @@ public class BookingManager
             bookingList.add(b1);
         }
 
+        return found;
     }
     private void loadBookingsDataFromFile(String filename) {
 
@@ -73,6 +75,26 @@ public class BookingManager
         } catch (IOException e) {
             System.out.println("Exception thrown. " + e);
         }
+    }
+
+    public void saveBookingsToFile(String fileName) {
+        try {
+            FileWriter bookingWriter = new FileWriter(fileName);
+            for (Booking b : bookingList) {
+
+
+                    bookingWriter.write(
+                            b.getBookingId() + ","
+
+                    );
+                bookingWriter.close();
+                System.out.println("Successfully wrote to the file.");
+                }
+            } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+
     }
 
     public void displayAllBookings()

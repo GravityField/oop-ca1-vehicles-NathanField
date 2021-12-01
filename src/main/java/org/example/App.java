@@ -1,8 +1,5 @@
 package org.example;
 //Nathan Field
-
-
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -179,7 +176,7 @@ import java.util.*;
                 }
             private void addVehicleMenu() {
 
-                double additional = 0;
+                double additional;
                 Scanner keyboard = new Scanner(System.in);
                 System.out.println("Enter Type:");
                 String type = keyboard.nextLine();
@@ -222,7 +219,7 @@ import java.util.*;
                 }
 
                 try {
-
+//fix incorrect casting
                     vehicleManager.addVehicle(type,make,model,milesPerKwH,registration,costPerMile,year,month,day,mileage,latitude,longitude, (int) additional);
                     System.out.println("Vehicle added");
 
@@ -304,15 +301,17 @@ import java.util.*;
             private void displayBookingMenu() {
                 final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
                         + "1. Show all Bookings\n"
-                        + "2. Find Booking by TBD\n"
-                        + "3. Find Booking by TBD\n"
-                        + "4. Exit\n"
+                        + "2. Add Booking\n"
+                        + "3. Find Booking\n"
+                        + "4. Find Booking\n"
+                        + "5. Exit\n"
 
-                        + "Enter Option [1,4]";
+                        + "Enter Option [1,5]";
 
                 final int SHOW_ALL = 1;
-                final int FIND_BY_ID = 2;
-                final int EXIT = 4;
+                final int ADD_BOOKING = 2;
+                final int FIND_BY_ID = 3;
+                final int EXIT = 5;
 
                 Scanner keyboard = new Scanner(System.in);
                 int option = 0;
@@ -325,6 +324,10 @@ import java.util.*;
                             case SHOW_ALL:
                                 System.out.println("Display ALL Bookings");
                                 bookingManager.displayAllBookings();
+                                break;
+                            case ADD_BOOKING:
+                                System.out.println("Add Bookings");
+                                addBookingMenu();
                                 break;
                             case FIND_BY_ID:
                                 break;
@@ -342,6 +345,38 @@ import java.util.*;
                 } while (option != EXIT);
 
             }
+            private void addBookingMenu() {
+
+                Scanner kb = new Scanner(System.in);
+
+                try {
+                    System.out.println("Enter Booking ID");
+                    int bookingId = kb.nextInt();
+                    System.out.println("Enter Passenger ID");
+                    int passengerId = kb.nextInt();
+                    int vehicleId = kb.nextInt();
+                    int year = kb.nextInt();
+                    int month= kb.nextInt();
+                    int day= kb.nextInt();
+                    int hour = kb.nextInt();
+                    int minute = kb.nextInt();
+                    int second= kb.nextInt();
+                    double latStart= kb.nextDouble();
+                    double longStart= kb.nextDouble();
+                    double latEnd= kb.nextDouble();
+                    double longEnd= kb.nextDouble();
+                    double cost= kb.nextDouble();
+                    boolean found = bookingManager.addBooking(bookingId, passengerId, vehicleId, year,month,day, hour, minute, second,latStart,longStart,latEnd, longEnd,cost);
+                    if (!found) {
+                        System.out.println("Booking was added");
+                    } else {
+                        System.out.println("Booking already exists");
+                    }
 
 
-        }
+                } catch (InputMismatchException | NumberFormatException e) {
+                    System.out.print("Invalid option - please enter valid details");
+                }
+            }
+            }
+
