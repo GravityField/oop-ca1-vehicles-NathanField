@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class BookingManager
 {
     private final ArrayList<Booking> bookingList;
@@ -103,6 +104,45 @@ public class BookingManager
             System.out.println(b.toString());
         }
     }
+    public void displayAllBookingId()
+    {
+        for (Booking b : bookingList) {
+            System.out.println(b.getBookingId());
+        }
+    }
+    public Booking findBookingById(int findId) {
+        for (Booking b : bookingList)
+            if(b.getBookingId() == findId) {
+                return b;
+            }
+        return null;
+
+
+    }
+
+    public void editBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+                            double latStart, double longStart, double latEnd, double longEnd, double cost)
+    {
+        boolean found = false;
+        for(Booking b: bookingList) {
+            if (b.getBookingId() == bookingId) {
+                found = true;
+                b.setPassengerId(passengerId);
+                b.setVehicleId(vehicleId);
+                b.setBookingDateTime(LocalDateTime.of(year, month, day, hour, minute, second));
+                b.setStartLocation(new LocationGPS(latStart,longStart));
+                b.setEndLocation(new LocationGPS(latEnd,longEnd));
+                break;
+            }
+
+        }
+        if(!found)
+        {
+            System.out.println("not found");
+        }
+
+    }
+
     public void deleteBooking(int bId)
     {
         for (Booking b : bookingList) {
@@ -112,6 +152,11 @@ public class BookingManager
             }
         }
     }
+
+
+
+
+
 
 
 
