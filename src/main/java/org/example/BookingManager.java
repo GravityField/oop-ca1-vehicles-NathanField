@@ -21,13 +21,13 @@ public class BookingManager
 
     //TODO implement functionality as per specification
 
-    public boolean addBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
                               double latStart, double longStart, double latEnd, double longEnd, double cost)
     {
         LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
         LocationGPS locationStart = new LocationGPS(latStart,longStart);
         LocationGPS locationEnd = new LocationGPS(latEnd,longEnd);
-        Booking b1 = new Booking(bookingId,passengerId,vehicleId,year,month,day,hour,minute,second,latStart,longStart,latEnd,longEnd,cost);
+        Booking b1 = new Booking(passengerId,vehicleId,year,month,day,hour,minute,second,latStart,longStart,latEnd,longEnd,cost);
         boolean found = false;
         for(Booking b: bookingList) {
             if (b.equals(b1)) {
@@ -67,7 +67,7 @@ public class BookingManager
                 double cost= sc.nextDouble();
 
                 // construct a Booking object and add it to the booking list
-                bookingList.add(new Booking(bookingId, passengerId, vehicleId, year, month, day, hour, minute, second,
+                bookingList.add(new Booking(passengerId, vehicleId, year, month, day, hour, minute, second,
                  latStart, longStart,latEnd,longEnd, cost));
             }
             sc.close();

@@ -21,6 +21,10 @@ public class VehicleManager {
         for (Vehicle v : vehicleList)
             System.out.println(v.toString());
     }
+    public void displayAllVehicleId() {
+        for (Vehicle v : vehicleList)
+            System.out.println(v.getId());
+    }
 
     public void loadVehiclesFromFile(String fileName) {
         try {
@@ -162,6 +166,16 @@ public class VehicleManager {
 
         for (Vehicle v : vehicleList) {
             if (v.getRegistration().equalsIgnoreCase(reg)) {
+                vehicles.add(v);
+            }
+        }
+        return vehicles;
+    }
+    public ArrayList<Vehicle> findVehicleById(int findId) {
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+
+        for (Vehicle v : vehicleList) {
+            if (v.getId() == findId) {
                 vehicles.add(v);
             }
         }

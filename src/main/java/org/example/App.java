@@ -1,5 +1,6 @@
 package org.example;
 //Nathan Field
+
 import java.io.IOException;
 import java.util.*;
 
@@ -97,13 +98,15 @@ import java.util.*;
                         + "1. Show all Passengers\n"
                         + "2. Add Passenger\n"
                         + "3. Find Passenger by Name\n"
-                        + "4. Exit\n"
-                        + "Enter Option [1,4]";
+                        + "4. Delete Passenger\n"
+                        + "5. Exit\n"
+                        + "Enter Option [1,5]";
 
                 final int SHOW_ALL = 1;
                 final int ADD_PASSENGER = 2;
                 final int FIND_BY_NAME = 3;
-                final int EXIT = 4;
+                final int DELETE_PASSENGER = 4;
+                final int EXIT = 5;
 
                 Scanner keyboard = new Scanner(System.in);
                 int option = 0;
@@ -125,13 +128,23 @@ import java.util.*;
 
                             case FIND_BY_NAME:
                                 System.out.println("Find Passenger by Name");
-                                System.out.println("Enter passenger name: ");
+                                System.out.println("Enter Passenger Name: ");
                                 String name = keyboard.nextLine();
                                 Passenger p = passengerStore.findPassengerByName(name);
                                 if (p == null)
                                     System.out.println("No passenger matching the name \"" + name + "\"");
                                 else
-                                    System.out.println("Found passenger: \n" + p.toString());
+                                    System.out.println("Found Passenger: \n" + p);
+                                break;
+                            case DELETE_PASSENGER:
+                                System.out.println("Delete Passenger Chosen");
+                                System.out.println("Enter Passenger Name: ");
+                                String delName = keyboard.nextLine();
+                                System.out.println("Enter Passenger Email");
+                                String delEmail = keyboard.nextLine();
+                                if(delName != null && delEmail != null) {
+                                    passengerStore.deletePassenger(delName, delEmail);
+                                }
                                 break;
                             case EXIT:
                                 System.out.println("Exit Menu option chosen");
@@ -193,7 +206,7 @@ import java.util.*;
                                 if (vehicles == null)
                                     System.out.println("No Vehicles matching the type \"" + type + "\"");
                                 else
-                                    System.out.println("Found Vehicle: \n" + vehicles.toString());
+                                    System.out.println("Found Vehicle: \n" + vehicles);
                                 break;
                             case FIND_BY_REGISTRATION:
                                 System.out.println("Find Vehicles by Registration");
@@ -203,7 +216,7 @@ import java.util.*;
                                 if (vehicles == null)
                                     System.out.println("No Vehicles matching the registration \"" + registration + "\"");
                                 else
-                                    System.out.println("Found Vehicle: \n" + vehicles.toString());
+                                    System.out.println("Found Vehicle: \n" + vehicles);
                                 break;
                             case EXIT:
                                 System.out.println("Exit Menu option chosen");
@@ -281,13 +294,19 @@ import java.util.*;
                     double latitude = keyboard.nextDouble();
                     System.out.println("Enter longitude");
                     double longitude = keyboard.nextDouble();
-                    boolean found = passengerStore.addPassenger(name, email, phone, latitude, longitude);
-                    if (!found) {
-                        System.out.println("Passenger was added");
-                    } else {
-                        System.out.println("Passenger already exists");
-                    }
+                    if(name != null && email != null) {
+                        boolean found = passengerStore.addPassenger(name, email, phone, latitude, longitude);
 
+                        if (!found) {
+                            System.out.println("Passenger was added");
+                        } else {
+                            System.out.println("Passenger already exists");
+                        }
+                    }
+                    else
+                    {
+                        System.out.println("Name and Email is required, Please Try Again");
+                    }
 
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.out.print("Invalid option - please enter valid details");
@@ -327,7 +346,7 @@ import java.util.*;
 
 
                 if(type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck") ) {
-                    System.out.println("Enter Loadspace");
+                    System.out.println("Enter LoadSpace");
                     additional = keyboard.nextDouble();
                 }
                 else
@@ -349,10 +368,9 @@ import java.util.*;
             private void addBookingMenu() {
 
                 Scanner kb = new Scanner(System.in);
-
+                vehicleManager.displayAllVehicleId();
+                passengerStore.displayAllPassengerId();
                 try {
-                    System.out.println("Enter Booking ID");
-                    int bookingId = kb.nextInt();
                     System.out.println("Enter Passenger ID");
                     int passengerId = kb.nextInt();
                     System.out.println("Enter Vehicle ID");
@@ -379,13 +397,21 @@ import java.util.*;
                     double longEnd= kb.nextDouble();
                     System.out.println("Enter Cost");
                     double cost= kb.nextDouble();
-                    boolean found = bookingManager.addBooking(bookingId, passengerId, vehicleId, year,month,day, hour, minute, second,latStart,longStart,latEnd, longEnd,cost);
-                    if (!found) {
-                        System.out.println("Booking was added");
-                    } else {
-                        System.out.println("Booking already exists");
+                    if(passengerStore.findPassengerById(passengerId) == null) {
+                        System.out.println("Passenger " + passengerId + " was not found");
                     }
-
+                    else if ( vehicleManager.findVehicleById(vehicleId) == null)
+                    {
+                        System.out.println("Vehicle " + vehicleId + " was not found");
+                    }
+                    else{
+                        boolean found = bookingManager.addBooking(passengerId, vehicleId, year, month, day, hour, minute, second, latStart, longStart, latEnd, longEnd, cost);
+                        if (!found) {
+                            System.out.println("Booking was added");
+                        } else {
+                            System.out.println("Booking already exists");
+                        }
+                    }
 
                 } catch (InputMismatchException | NumberFormatException e) {
                     System.out.print("Invalid option - please enter valid details");

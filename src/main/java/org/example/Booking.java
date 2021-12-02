@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 class Booking
 {
+    private IdGenerator idGenerator = IdGenerator.getInstance("next-id-store.txt");
     private int bookingId;
     private int passengerId;
     private int vehicleId;
@@ -15,9 +16,9 @@ class Booking
 
     //TODO - see specification
 
-    public Booking(int bookingId, int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+    public Booking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
                    double latStart, double longStart,double latEnd, double longEnd, double cost) {
-        this.bookingId = bookingId;
+        this.bookingId = idGenerator.getNextId();
         this.passengerId = passengerId;
         this.vehicleId = vehicleId;
         this.bookingDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
