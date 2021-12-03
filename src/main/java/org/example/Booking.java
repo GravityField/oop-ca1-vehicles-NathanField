@@ -1,6 +1,8 @@
 package org.example;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 class Booking
 {
@@ -8,7 +10,7 @@ class Booking
     private int bookingId;
     private int passengerId;
     private int vehicleId;
-    private LocalDateTime bookingDateTime;
+    private LocalDate bookingDate;
     private LocationGPS startLocation;
     private LocationGPS endLocation;
 
@@ -16,12 +18,22 @@ class Booking
 
     //TODO - see specification
 
-    public Booking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute, int second,
+    public Booking(int bookingId, int passengerId, int vehicleId, int year, int month, int day,
+                   double latStart, double longStart,double latEnd, double longEnd, double cost) {
+        this.bookingId = bookingId;
+        this.passengerId = passengerId;
+        this.vehicleId = vehicleId;
+        this.bookingDate = LocalDate.of(year, month, day);
+        this.startLocation = new LocationGPS(latStart,longStart);
+        this.endLocation = new LocationGPS(latEnd,longEnd);
+        this.cost = cost;
+    }
+    public Booking(int passengerId, int vehicleId, int year, int month, int day,
                    double latStart, double longStart,double latEnd, double longEnd, double cost) {
         this.bookingId = idGenerator.getNextId();
         this.passengerId = passengerId;
         this.vehicleId = vehicleId;
-        this.bookingDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
+        this.bookingDate = LocalDate.of(year, month, day);
         this.startLocation = new LocationGPS(latStart,longStart);
         this.endLocation = new LocationGPS(latEnd,longEnd);
         this.cost = cost;
@@ -51,12 +63,12 @@ class Booking
         this.vehicleId = vehicleId;
     }
 
-    public LocalDateTime getBookingDateTime() {
-        return bookingDateTime;
+    public LocalDate getBookingDate() {
+        return bookingDate;
     }
 
-    public void setBookingDateTime(LocalDateTime bookingDateTime) {
-        this.bookingDateTime = bookingDateTime;
+    public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
     public LocationGPS getStartLocation() {
@@ -84,12 +96,25 @@ class Booking
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return passengerId == booking.passengerId && vehicleId == booking.vehicleId && bookingDate.equals(booking.bookingDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(passengerId, vehicleId, bookingDate);
+    }
+
+    @Override
     public String toString() {
         return "Booking{" +
                 "bookingId=" + bookingId +
                 ", passengerId=" + passengerId +
                 ", vehicleId=" + vehicleId +
-                ", bookingDateTime=" + bookingDateTime +
+                ", bookingDateTime=" + bookingDate +
                 ", startLocation=" + startLocation +
                 ", endLocation=" + endLocation +
                 ", cost=" + cost +

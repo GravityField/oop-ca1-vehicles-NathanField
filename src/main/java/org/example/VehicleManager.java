@@ -4,16 +4,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 
 public class VehicleManager {
     private final ArrayList<Vehicle> vehicleList;  // for Car and Van objects
+    private PassengerStore passengerStore;
+    private BookingManager bookingManager;
 
-    public VehicleManager(String fileName) {
+    public VehicleManager(String fileName, PassengerStore passengerStore, BookingManager bookingManager) {
         this.vehicleList = new ArrayList<>();
+        this.passengerStore = passengerStore;
+        this.bookingManager = bookingManager;
         loadVehiclesFromFile(fileName);
     }
 
@@ -155,7 +156,7 @@ public class VehicleManager {
                     year, month, day,
                     mileage, latitude, longitude,
                     loadSpace));
-            //loadspace is passed in for number of seats
+            //loadspace is passed in as int for number of seats
         }
     }
 
@@ -201,5 +202,124 @@ public class VehicleManager {
         }
     }
 
+    public void displayVehicleMenu() {
+        final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
+                + "1. Show all Vehicles\n"
+                + "2. Add Vehicle\n"
+                + "3. Find Vehicle by Type\n"
+                + "4. Find Vehicle by Registration\n"
+                + "5. Exit\n"
+
+                + "Enter Option [1,5]";
+
+        final int SHOW_ALL = 1;
+        final int ADD_VEHICLE = 2;
+        final int FIND_BY_TYPE = 3;
+        final int FIND_BY_REGISTRATION = 4;
+        final int EXIT = 5;
+
+        ArrayList<Vehicle> vehicles;
+
+        Scanner keyboard = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyboard.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case SHOW_ALL:
+                        System.out.println("Display ALL Vehicles");
+                        displayAllVehicles();
+                        break;
+                    case ADD_VEHICLE:
+                        System.out.println("Add Vehicle Chosen");
+                        addVehicleMenu();
+                        break;
+                    case FIND_BY_TYPE:
+                        System.out.println("Find Vehicles by Type");
+                        System.out.println("Enter Vehicle Type: ");
+                        String type = keyboard.nextLine();
+                        vehicles = findVehiclesByType(type);
+                        if (vehicles == null)
+                            System.out.println("No Vehicles matching the type \"" + type + "\"");
+                        else
+                            System.out.println("Found Vehicle: \n" + vehicles);
+                        break;
+                    case FIND_BY_REGISTRATION:
+                        System.out.println("Find Vehicles by Registration");
+                        System.out.println("Enter Vehicle Registration: ");
+                        String registration = keyboard.nextLine();
+                        vehicles = findVehiclesByRegistration(registration);
+                        if (vehicles == null)
+                            System.out.println("No Vehicles matching the registration \"" + registration + "\"");
+                        else
+                            System.out.println("Found Vehicle: \n" + vehicles);
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
+
+    }
+    public void addVehicleMenu() {
+
+        double additional;
+        Scanner keyboard = new Scanner(System.in);
+        System.out.println("Enter Type:");
+        String type = keyboard.nextLine();
+        System.out.println("Enter Make:");
+        String make = keyboard.nextLine();
+        System.out.println("Enter Model:");
+        String model = keyboard.nextLine();
+        System.out.println("Enter milesPerKwH");
+        String usersInput = keyboard.nextLine();
+        double milesPerKwH = Double.parseDouble(usersInput);
+        System.out.println("Enter Registration");
+        String registration = keyboard.nextLine();
+        System.out.println("Enter Cost Per Mile");
+        double costPerMile = keyboard.nextDouble();
+        System.out.println("Enter Last Service Year");
+        int year = keyboard.nextInt();
+        System.out.println("Enter Last Service Month");
+        int month = keyboard.nextInt();
+        System.out.println("Enter Last Service Day");
+        int day = keyboard.nextInt();
+        System.out.println("Enter Mileage");
+        int mileage = keyboard.nextInt();
+
+
+        System.out.println("Enter Latitude");
+        double latitude = keyboard.nextDouble();
+        System.out.println("Enter longitude");
+        double longitude = keyboard.nextDouble();
+
+
+        if (type.equalsIgnoreCase("Van") || type.equalsIgnoreCase("Truck")) {
+            System.out.println("Enter LoadSpace");
+            additional = keyboard.nextDouble();
+        } else {
+            System.out.println("Enter Number of Seats");
+            additional = keyboard.nextInt();
+
+        }
+
+        try {
+//fix incorrect casting
+            addVehicle(type, make, model, milesPerKwH, registration, costPerMile, year, month, day, mileage, latitude, longitude, (int) additional);
+            System.out.println("Vehicle added");
+
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.print("Invalid option - please enter valid details");
+        }
+    }
 
 }

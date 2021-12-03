@@ -3,15 +3,20 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class PassengerStore {
 
     private final ArrayList<Passenger> passengerList;
+    private VehicleManager vehicleManager;
+    private BookingManager bookingManager;
 
-    public PassengerStore(String fileName) {
+    public PassengerStore(String fileName, VehicleManager vehicleManager, BookingManager bookingManager) {
         this.passengerList = new ArrayList<>();
+        this.vehicleManager = vehicleManager;
+        this.bookingManager = bookingManager;
         loadPassengerDataFromFile(fileName);
     }
 
@@ -134,7 +139,111 @@ public class PassengerStore {
 
 
     }
+    // Sub-Menu for Passenger operations
+    //
+    public void displayPassengerMenu() {
+        final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
+                + "1. Show all Passengers\n"
+                + "2. Add Passenger\n"
+                + "3. Find Passenger by Name\n"
+                + "4. Delete Passenger\n"
+                + "5. Exit\n"
+                + "Enter Option [1,5]";
+
+        final int SHOW_ALL = 1;
+        final int ADD_PASSENGER = 2;
+        final int FIND_BY_NAME = 3;
+        final int DELETE_PASSENGER = 4;
+        final int EXIT = 5;
+
+        Scanner keyboard = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyboard.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case SHOW_ALL:
+                        System.out.println("Display ALL Passengers");
+                        displayAllPassengers();
+                        break;
+                    case ADD_PASSENGER:
+                        System.out.println("Add Passenger Chosen");
+                        addPassengerMenu();
+                        break;
 
 
+                    case FIND_BY_NAME:
+                        System.out.println("Find Passenger by Name");
+                        System.out.println("Enter Passenger Name: ");
+                        String name = keyboard.nextLine();
+                        Passenger p = findPassengerByName(name);
+                        if (p == null)
+                            System.out.println("No passenger matching the name \"" + name + "\"");
+                        else
+                            System.out.println("Found Passenger: \n" + p);
+                        break;
+                    case DELETE_PASSENGER:
+                        System.out.println("Delete Passenger Chosen");
+                        System.out.println("Enter Passenger Name: ");
+                        String delName = keyboard.nextLine();
+                        System.out.println("Enter Passenger Email");
+                        String delEmail = keyboard.nextLine();
+                        if (delName != null && delEmail != null) {
+                            deletePassenger(delName, delEmail);
+                        }
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
+
+    }
+
+
+
+
+
+
+    private void addPassengerMenu() {
+
+        Scanner keyboard = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter Name:");
+            String name = keyboard.nextLine();
+            System.out.println("Enter Email:");
+            String email = keyboard.nextLine();
+            System.out.println("Enter Phone Number:");
+            String phone = keyboard.nextLine();
+            System.out.println("Enter Latitude");
+            double latitude = keyboard.nextDouble();
+            System.out.println("Enter longitude");
+            double longitude = keyboard.nextDouble();
+            if (name != null && email != null) {
+                boolean found = addPassenger(name, email, phone, latitude, longitude);
+
+                if (!found) {
+                    System.out.println("Passenger was added");
+                } else {
+                    System.out.println("Passenger already exists");
+                }
+            } else {
+                System.out.println("Name and Email is required, Please Try Again");
+            }
+
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.print("Invalid option - please enter valid details");
+        }
+    }
 
 } // end class
