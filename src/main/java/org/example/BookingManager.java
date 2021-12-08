@@ -40,6 +40,7 @@ public class BookingManager {
         }
         if (!found) {
             bookingList.add(b1);
+
         }
 
         return found;
