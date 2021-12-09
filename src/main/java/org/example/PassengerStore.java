@@ -146,19 +146,21 @@ public class PassengerStore {
 
     }
 
-    public Passenger findPassengerByName(String Name) {
+    public Passenger findPassengerByName(String name) {
         for (Passenger p : passengerList)
-            if(p.getName().equalsIgnoreCase(Name)) {
+            if(p.getName().equalsIgnoreCase(name)) {
                 return p;
             }
         return null;
 
 
     }
-    public Passenger findPassengerById(int findId) {
+    public ArrayList<Passenger> findPassengerById(int findId) {
+        ArrayList<Passenger> passengers = new ArrayList<>();
         for (Passenger p : passengerList)
             if(p.getId() == findId) {
-                return p;
+                passengers.add(p);
+                return passengers;
             }
         return null;
 

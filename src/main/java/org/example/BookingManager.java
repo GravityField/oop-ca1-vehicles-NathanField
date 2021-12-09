@@ -25,25 +25,30 @@ public class BookingManager {
 
     //TODO implement functionality as per specification
 
-    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day,
+    public void addBooking(int passengerId, int vehicleId, int year, int month, int day,
                               double latStart, double longStart, double latEnd, double longEnd, double cost) {
 //        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
 //        LocationGPS locationStart = new LocationGPS(latStart,longStart);
 //        LocationGPS locationEnd = new LocationGPS(latEnd,longEnd);
-        Booking b1 = new Booking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
-        boolean found = false;
-        for (Booking b : bookingList) {
-            if (b.equals(b1)) {
-                found = true;
-                break;
+
+        if(passengerStore.findPassengerById(passengerId) != null) {
+            if(vehicleManager.findVehicleById(vehicleId) != null) {
+                Booking b1 = new Booking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
+                boolean found = false;
+                for (Booking b : bookingList) {
+                    if (b.equals(b1)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    bookingList.add(b1);
+
+                }
+
             }
         }
-        if (!found) {
-            bookingList.add(b1);
 
-        }
-
-        return found;
     }
 
     private void loadBookingsDataFromFile(String filename) {
@@ -257,12 +262,12 @@ public class BookingManager {
             } else if (vehicleManager.findVehicleById(vehicleId) == null) {
                 System.out.println("Vehicle " + vehicleId + " was not found");
             } else {
-                boolean found = addBooking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
-                if (!found) {
-                    System.out.println("Booking was added");
-                } else {
-                    System.out.println("Booking already exists");
-                }
+                addBooking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
+//                if (!found) {
+//                    System.out.println("Booking was added");
+//                } else {
+//                    System.out.println("Booking already exists");
+//                }
             }
 
         } catch (InputMismatchException | NumberFormatException e) {

@@ -149,7 +149,7 @@ public class VehicleManager {
                     year, month, day,
                     mileage, latitude, longitude,
                     loadSpace));
-        } else if (type.equalsIgnoreCase("Car")) {
+        } else if (type.equalsIgnoreCase("Car") || type.equalsIgnoreCase("4x4")) {
             // construct a Car object and add it to the passenger list
             vehicleList.add(new Car(type, make, model, milesPerKwH,
                     registration, costPerMile,
