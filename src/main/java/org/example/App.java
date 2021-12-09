@@ -33,6 +33,7 @@ public class App {
         //pMgr.saveToFile();
         vehicleManager.saveVehiclesToFile("vehicles.txt");
         bookingManager.saveBookingsToFile("bookings.txt");
+        passengerStore.savePassengersToFile("passengers.txt");
         System.out.println("Program ending, Goodbye");
     }
 

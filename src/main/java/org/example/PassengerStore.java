@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -56,7 +57,31 @@ public class PassengerStore {
     }
 
     // TODO - see functional spec for details of code to add
+    public void savePassengersToFile(String fileName) {
+        try {
+            FileWriter passengerWriter = new FileWriter(fileName);
+            for (Passenger p : passengerList) {
 
+
+                passengerWriter.write(
+                        p.getId() + "," +
+                        p.getName() + "," +
+                                p.getEmail() + "," +
+                                p.getPhone() + "," +
+                                p.getLocation().getLatitude() + "," +
+                                p.getLocation().getLongitude() + "\n"
+                );
+
+
+            }
+            System.out.println("Successfully wrote Passengers to the file.");
+            passengerWriter.close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+
+    }
 
     public void displayAllPassengers() {
         for (Passenger p : passengerList) {

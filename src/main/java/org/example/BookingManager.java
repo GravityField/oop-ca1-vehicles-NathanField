@@ -100,7 +100,7 @@ public class BookingManager {
 
 
             }
-            System.out.println("Successfully wrote to the file.");
+            System.out.println("Successfully wrote Bookings to the file.");
             bookingWriter.close();
         } catch (IOException ioException) {
             ioException.printStackTrace();
@@ -130,6 +130,17 @@ public class BookingManager {
 
 
     }
+
+    public Booking findBookingByName(String name) {
+        for (Booking b : bookingList)
+            if (b.getPassengerId() == passengerStore.findPassengerByName(name).getId()) {
+                return b;
+            }
+        return null;
+
+
+    }
+
 
     public void editBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day,
                             double latStart, double longStart, double latEnd, double longEnd, double cost) {
