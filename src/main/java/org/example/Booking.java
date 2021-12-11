@@ -17,7 +17,7 @@ class Booking
     private double cost;  //Calculated at booking time
 
     //TODO - see specification
-
+//from textfile
     public Booking(int bookingId, int passengerId, int vehicleId, int year, int month, int day,
                    double latStart, double longStart,double latEnd, double longEnd, double cost) {
         this.bookingId = bookingId;
@@ -28,6 +28,7 @@ class Booking
         this.endLocation = new LocationGPS(latEnd,longEnd);
         this.cost = cost;
     }
+
     public Booking(int passengerId, int vehicleId, int year, int month, int day,
                    double latStart, double longStart,double latEnd, double longEnd, double cost) {
         this.bookingId = idGenerator.getNextId();
@@ -120,4 +121,7 @@ class Booking
                 ", cost=" + cost +
                 '}';
     }
+
+
+
 }

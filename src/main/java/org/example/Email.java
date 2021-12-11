@@ -29,4 +29,17 @@ public class Email {
         this.subject = subject;
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "idGenerator=" + idGenerator +
+                ", emailId=" + emailId +
+                ", to='" + to + '\'' +
+                ", from='" + from + '\'' +
+                ", emailDate=" + emailDate +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

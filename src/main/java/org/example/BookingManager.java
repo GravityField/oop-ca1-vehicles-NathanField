@@ -1,19 +1,18 @@
 package org.example;
 
+import java.awt.print.Book;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class BookingManager {
     private final ArrayList<Booking> bookingList;
     private PassengerStore passengerStore;
     private VehicleManager vehicleManager;
+    BookingManager.DateTimeComparator dateComparator = new BookingManager.DateTimeComparator();
 
     // Constructor
     public BookingManager(String fileName, PassengerStore passengerStore, VehicleManager vehicleManager) {
@@ -26,13 +25,13 @@ public class BookingManager {
     //TODO implement functionality as per specification
 
     public void addBooking(int passengerId, int vehicleId, int year, int month, int day,
-                              double latStart, double longStart, double latEnd, double longEnd, double cost) {
+                           double latStart, double longStart, double latEnd, double longEnd, double cost) {
 //        LocalDateTime localDateTime = LocalDateTime.of(year, month, day, hour, minute, second);
 //        LocationGPS locationStart = new LocationGPS(latStart,longStart);
 //        LocationGPS locationEnd = new LocationGPS(latEnd,longEnd);
 
-        if(passengerStore.findPassengerById(passengerId) != null) {
-            if(vehicleManager.findVehicleById(vehicleId) != null) {
+        if (passengerStore.findPassengerById(passengerId) != null) {
+            if (vehicleManager.findVehicleById(vehicleId) != null) {
                 Booking b1 = new Booking(passengerId, vehicleId, year, month, day, latStart, longStart, latEnd, longEnd, cost);
                 boolean found = false;
                 for (Booking b : bookingList) {
@@ -43,7 +42,12 @@ public class BookingManager {
                 }
                 if (!found) {
                     bookingList.add(b1);
-
+//email
+                    String content = "Booking Confirmation for booking Number " + b1.getBookingId() + "\n"
+                            + "Booking Date: " + b1.getBookingDate() + "\n"
+                            + "Total Bill: " + b1.getCost();
+                    Email email = new Email(passengerStore.findPassengerById(passengerId).getEmail(), "", LocalDate.now(), "Booking Confirmation", content);
+                    System.out.println(email);
                 }
 
             }
@@ -94,7 +98,7 @@ public class BookingManager {
                                 + b.getPassengerId() + ","
                                 + b.getVehicleId() + ","
                                 + b.getBookingDate().getYear() + ","
-                                + b.getBookingDate().getDayOfMonth() + ","
+                                + b.getBookingDate().getMonthValue() + ","
                                 + b.getBookingDate().getDayOfMonth() + ","
                                 + b.getStartLocation().getLatitude() + ","
                                 + b.getStartLocation().getLongitude() + ","
@@ -115,8 +119,10 @@ public class BookingManager {
     }
 
     public void displayAllBookings() {
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("BookingID\tPassengerID\tVehicleID\tDate\t\t\tGPS Start\tGPS End");
         for (Booking b : bookingList) {
-            System.out.println(b.toString());
+            System.out.printf("%-12s%-12s%-12s%-15s%-4.2f% -4.2f% -4.2f% -4.2f\n", b.getBookingId(), b.getPassengerId(), b.getVehicleId(), b.getBookingDate().toString(), b.getStartLocation().getLatitude(), b.getStartLocation().getLongitude(), b.getEndLocation().getLatitude(), b.getEndLocation().getLongitude());
         }
     }
 
@@ -136,16 +142,24 @@ public class BookingManager {
 
     }
 
-    public Booking findBookingByName(String name) {
-        for (Booking b : bookingList)
+    public ArrayList<Booking> findBookingByName(String name) {
+        ArrayList<Booking> bookingResults = new ArrayList<>();
+        for (Booking b : bookingList) {
             if (b.getPassengerId() == passengerStore.findPassengerByName(name).getId()) {
-                return b;
+                bookingResults.add(b);
             }
-        return null;
 
-
+        }
+        Collections.sort(bookingResults, dateComparator);
+        return bookingResults;
     }
 
+    public static class DateTimeComparator implements Comparator<Booking> {
+
+        public int compare(Booking b1, Booking b2) {
+            return b1.getBookingDate().compareTo(b2.getBookingDate());
+        }
+    }
 
     public void editBooking(int bookingId, int passengerId, int vehicleId, int year, int month, int day,
                             double latStart, double longStart, double latEnd, double longEnd, double cost) {
@@ -182,16 +196,20 @@ public class BookingManager {
                 + "1. Show all Bookings\n"
                 + "2. Add Booking\n"
                 + "3. Edit Booking\n"
-                + "4. Find Booking\n"
-                + "5. Exit\n"
+                + "4. Find Booking by Passenger Name\n"
+                + "5. Average Booking Length\n"
+                + "6. Delete Booking\n"
+                + "7. Exit\n"
 
-                + "Enter Option [1,5]";
+                + "Enter Option [1,7]";
 
         final int SHOW_ALL = 1;
         final int ADD_BOOKING = 2;
         final int EDIT_BOOKING = 3;
-        final int FIND_BY_ID = 4;
-        final int EXIT = 5;
+        final int FIND_BY_NAME = 4;
+        final int CALCULATE_AVERAGE_LENGTH = 5;
+        final int DELETE_BOOKING = 6;
+        final int EXIT = 7;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -213,7 +231,22 @@ public class BookingManager {
                         System.out.println("Edit Bookings");
                         editBookingMenu();
                         break;
-                    case FIND_BY_ID:
+                    case FIND_BY_NAME:
+                        System.out.println("Enter passenger name to search for bookings");
+                        String findName = keyboard.nextLine();
+                        ArrayList<Booking> results = findBookingByName(findName);
+                        if (results != null) {
+                            System.out.println(results);
+                        }
+                        break;
+                    case CALCULATE_AVERAGE_LENGTH:
+                        System.out.println("Average booking Length is " + calculateAverageLength());
+                        break;
+                    case DELETE_BOOKING:
+                        System.out.println("Delete Booking Chosen");
+                        int deleteId = keyboard.nextInt();
+                        deleteBooking(deleteId);
+                        System.out.println("Deleted Booking");
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -229,6 +262,7 @@ public class BookingManager {
         } while (option != EXIT);
 
     }
+
     public void addBookingMenu() {
 
         Scanner kb = new Scanner(System.in);
@@ -255,8 +289,11 @@ public class BookingManager {
             double latEnd = kb.nextDouble();
             System.out.println("Enter End Longitude");
             double longEnd = kb.nextDouble();
-            System.out.println("Enter Cost");
-            double cost = kb.nextDouble();
+            double depotLat = vehicleManager.findVehicleById(vehicleId).getDepotGPSLocation().getLatitude();
+            double depotLong = vehicleManager.findVehicleById(vehicleId).getDepotGPSLocation().getLongitude();
+            double cost = haversine(depotLat, depotLong, latStart, longStart) + haversine(latStart, longStart, latEnd, longEnd) + haversine(latEnd, longEnd, depotLat, depotLong);
+
+
             if (passengerStore.findPassengerById(passengerId) == null) {
                 System.out.println("Passenger " + passengerId + " was not found");
             } else if (vehicleManager.findVehicleById(vehicleId) == null) {
@@ -274,6 +311,7 @@ public class BookingManager {
             System.out.print("Invalid option - please enter valid details");
         }
     }
+
     public void editBookingMenu() {
 
         Scanner kb = new Scanner(System.in);
@@ -352,6 +390,38 @@ public class BookingManager {
                 }
             } while (option != EXIT);
         }
+    }
+
+    double calculateAverageLength() {
+        double result = 0;
+        for (Booking b : bookingList) {
+            result = result + b.getCost();
+
+        }
+        result = result / bookingList.size();
+
+        return result;
+    }
+
+    //https://www.geeksforgeeks.org/haversine-formula-to-find-distance-between-two-points-on-a-sphere/
+    double haversine(double lat1, double lon1,
+                     double lat2, double lon2) {
+        // distance between latitudes and longitudes
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        // convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        // apply formulae
+        double a = Math.pow(Math.sin(dLat / 2), 2) +
+                Math.pow(Math.sin(dLon / 2), 2) *
+                        Math.cos(lat1) *
+                        Math.cos(lat2);
+        double rad = 3961;
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return rad * c;
     }
 
 }

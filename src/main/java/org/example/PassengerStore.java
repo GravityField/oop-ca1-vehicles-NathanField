@@ -84,8 +84,10 @@ public class PassengerStore {
     }
 
     public void displayAllPassengers() {
-        for (Passenger p : passengerList) {
-            System.out.println(p.toString());
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Passenger ID Name\t\t\t\tEmail\t\t\t\t\tPhone\t\t\tLocation");
+        for (Passenger p : passengerList){
+            System.out.printf("%-10s\t%-20s%-22s%-16s%-4.2f  %-4.2f\n", p.getId(), p.getName(), p.getEmail(), p.getPhone(), p.getLocation().getLatitude(), p.getLocation().getLongitude());
         }
     }
     public void displayAllPassengerId() {
@@ -155,12 +157,11 @@ public class PassengerStore {
 
 
     }
-    public ArrayList<Passenger> findPassengerById(int findId) {
-        ArrayList<Passenger> passengers = new ArrayList<>();
+    public Passenger findPassengerById(int findId) {
         for (Passenger p : passengerList)
             if(p.getId() == findId) {
-                passengers.add(p);
-                return passengers;
+
+                return p;
             }
         return null;
 

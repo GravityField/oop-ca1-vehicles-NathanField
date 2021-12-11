@@ -19,8 +19,11 @@ public class VehicleManager {
     }
 
     public void displayAllVehicles() {
-        for (Vehicle v : vehicleList)
-            System.out.println(v.toString());
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+            System.out.println("VehicleID\tType\tMake\t\tModel\tMilesPerKwH\t\tRegistration CostPerMile LastServiceDate\tMileage\tDepot Location");
+        for (Vehicle v : vehicleList){
+            System.out.printf("%-12s%-8s%-12s%-12s%-12s%-15s%-10.2f%-15s%10s  %-4.2f  %-4.2f\n", v.getId(), v.getType(), v.getMake(), v.getModel(), v.getMilesPerKwH(), v.getRegistration(), v.getCostPerMile(), v.getLastServicedDate(), v.getMileage(), v.getDepotGPSLocation().getLatitude(), v.getDepotGPSLocation().getLongitude());
+        }
     }
     public void displayAllVehicleId() {
         for (Vehicle v : vehicleList)
@@ -172,15 +175,14 @@ public class VehicleManager {
         }
         return vehicles;
     }
-    public ArrayList<Vehicle> findVehicleById(int findId) {
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
+    public Vehicle findVehicleById(int findId) {
 
         for (Vehicle v : vehicleList) {
             if (v.getId() == findId) {
-                vehicles.add(v);
+                return v;
             }
         }
-        return vehicles;
+        return null;
     }
 
     public ArrayList<Vehicle> findVehiclesByType(String type) {

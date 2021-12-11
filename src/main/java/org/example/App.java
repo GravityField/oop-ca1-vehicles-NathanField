@@ -71,6 +71,7 @@ public class App {
                     case BOOKINGS:
                         System.out.println("Bookings option chosen");
                         bookingManager.displayBookingMenu();
+
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
