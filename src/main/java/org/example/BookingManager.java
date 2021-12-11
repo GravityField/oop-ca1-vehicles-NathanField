@@ -125,6 +125,16 @@ public class BookingManager {
             System.out.printf("%-12s%-12s%-12s%-15s%-4.2f% -4.2f% -4.2f% -4.2f\n", b.getBookingId(), b.getPassengerId(), b.getVehicleId(), b.getBookingDate().toString(), b.getStartLocation().getLatitude(), b.getStartLocation().getLongitude(), b.getEndLocation().getLatitude(), b.getEndLocation().getLongitude());
         }
     }
+    public void displayCurrentBookings() {
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println("BookingID\tPassengerID\tVehicleID\tDate\t\t\tGPS Start\tGPS End");
+        for (Booking b : bookingList) {
+            if (b.getBookingDate().isAfter(LocalDate.now())  ) {
+                System.out.printf("%-12s%-12s%-12s%-15s%-4.2f% -4.2f% -4.2f% -4.2f\n", b.getBookingId(), b.getPassengerId(), b.getVehicleId(), b.getBookingDate().toString(), b.getStartLocation().getLatitude(), b.getStartLocation().getLongitude(), b.getEndLocation().getLatitude(), b.getEndLocation().getLongitude());
+
+            }
+        }
+    }
 
     public void displayAllBookingId() {
         for (Booking b : bookingList) {
@@ -193,23 +203,26 @@ public class BookingManager {
 
     public void displayBookingMenu() {
         final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
-                + "1. Show all Bookings\n"
+                + "1. Show Current Bookings\n"
                 + "2. Add Booking\n"
                 + "3. Edit Booking\n"
                 + "4. Find Booking by Passenger Name\n"
                 + "5. Average Booking Length\n"
                 + "6. Delete Booking\n"
-                + "7. Exit\n"
+                + "7. All Bookings\n"
+                + "8. Exit\n"
 
-                + "Enter Option [1,7]";
+                + "Enter Option [1,8]";
 
-        final int SHOW_ALL = 1;
+        final int SHOW_CURRENT = 1;
         final int ADD_BOOKING = 2;
         final int EDIT_BOOKING = 3;
         final int FIND_BY_NAME = 4;
         final int CALCULATE_AVERAGE_LENGTH = 5;
         final int DELETE_BOOKING = 6;
-        final int EXIT = 7;
+        final int SHOW_ALL = 7;
+        final int EXIT = 8;
+
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -219,6 +232,10 @@ public class BookingManager {
                 String usersInput = keyboard.nextLine();
                 option = Integer.parseInt(usersInput);
                 switch (option) {
+                    case SHOW_CURRENT:
+                        System.out.println("Display Current Bookings Chosen");
+                        displayCurrentBookings();
+                        break;
                     case SHOW_ALL:
                         System.out.println("Display ALL Bookings");
                         displayAllBookings();
