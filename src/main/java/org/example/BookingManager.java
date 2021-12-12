@@ -210,9 +210,10 @@ public class BookingManager {
                 + "5. Average Booking Length\n"
                 + "6. Delete Booking\n"
                 + "7. All Bookings\n"
-                + "8. Exit\n"
+                + "8. Filter Bookings by Year\n"
+                + "9. Exit\n"
 
-                + "Enter Option [1,8]";
+                + "Enter Option [1,9]";
 
         final int SHOW_CURRENT = 1;
         final int ADD_BOOKING = 2;
@@ -221,7 +222,8 @@ public class BookingManager {
         final int CALCULATE_AVERAGE_LENGTH = 5;
         final int DELETE_BOOKING = 6;
         final int SHOW_ALL = 7;
-        final int EXIT = 8;
+        final int FILTER_BY_YEAR = 8;
+        final int EXIT = 9;
 
 
         Scanner keyboard = new Scanner(System.in);
@@ -264,6 +266,14 @@ public class BookingManager {
                         int deleteId = keyboard.nextInt();
                         deleteBooking(deleteId);
                         System.out.println("Deleted Booking");
+                        break;
+                    case FILTER_BY_YEAR:
+                        System.out.println("Filter by Booking Year...");
+                        System.out.println("Enter Year to filter by: ");
+                        int filterYear = keyboard.nextInt();
+                        List<Booking> yearList = filterBy(new BookingYearFilter(filterYear));
+                        System.out.println(yearList);
+
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");
@@ -439,6 +449,21 @@ public class BookingManager {
         double rad = 3961;
         double c = 2 * Math.asin(Math.sqrt(a));
         return rad * c;
+    }
+    /**
+     * @param filter - a filter object that implements the IFilter interface
+     *               and thus has a matches() method to match two Products
+     * @return a list of objects that matched based on the filter's match() method
+     */
+    public List<Booking> filterBy(IFilter filter)            // I stands for Interface
+    {
+        List<Booking> filteredList = new ArrayList<>();
+        for (Booking b : this.bookingList) {
+            if (filter.matches(b))    // use matches() method of the filter to match products
+                filteredList.add(b);
+        }
+
+        return filteredList;
     }
 
 }

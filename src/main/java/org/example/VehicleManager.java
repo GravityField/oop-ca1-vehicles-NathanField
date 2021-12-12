@@ -20,8 +20,20 @@ public class VehicleManager {
 
     public void displayAllVehicles() {
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
-            System.out.println("VehicleID\tType\tMake\t\tModel\tMilesPerKwH\t\tRegistration CostPerMile LastServiceDate\tMileage\tDepot Location");
+            System.out.println("VehicleID\tType\tMake\t\tModel\tMilesPerKwH\t\tRegistration CostPerMile LastServiceDate\tMileage\tDepot Location\tNumber Of Seats/LoadSpace");
         for (Vehicle v : vehicleList){
+            if(v.getType().equalsIgnoreCase("Car") || v.getType().equalsIgnoreCase("4x4") ) {
+                System.out.printf("%-12s%-8s%-12s%-12s%-12s%-15s%-10.2f%-15s%10s  %-6.2f  %-6.2f    %-2s seats\n", v.getId(), v.getType(), v.getMake(), v.getModel(), v.getMilesPerKwH(), v.getRegistration(), v.getCostPerMile(), v.getLastServicedDate(), v.getMileage(), v.getDepotGPSLocation().getLatitude(), v.getDepotGPSLocation().getLongitude(), ((Car) v).getNumberOfSeats() );
+            }
+            else if(v.getType().equalsIgnoreCase("Van") || v.getType().equalsIgnoreCase("Truck") ) {
+                System.out.printf("%-12s%-8s%-12s%-12s%-12s%-15s%-10.2f%-15s%10s  %-6.2f  %-6.2f    %-6.2f kg\n", v.getId(), v.getType(), v.getMake(), v.getModel(), v.getMilesPerKwH(), v.getRegistration(), v.getCostPerMile(), v.getLastServicedDate(), v.getMileage(), v.getDepotGPSLocation().getLatitude(), v.getDepotGPSLocation().getLongitude(), ((Van) v).getLoadSpace() );
+            }
+        }
+    }
+    public void displayFilteredVehicles(List<Vehicle> vehicles) {
+        System.out.println("----------------------------------------------------------------------------------------------------------------------");
+        System.out.println("VehicleID\tType\tMake\t\tModel\tMilesPerKwH\t\tRegistration CostPerMile LastServiceDate\tMileage\tDepot Location");
+        for (Vehicle v : vehicles){
             System.out.printf("%-12s%-8s%-12s%-12s%-12s%-15s%-10.2f%-15s%10s  %-4.2f  %-4.2f\n", v.getId(), v.getType(), v.getMake(), v.getModel(), v.getMilesPerKwH(), v.getRegistration(), v.getCostPerMile(), v.getLastServicedDate(), v.getMileage(), v.getDepotGPSLocation().getLatitude(), v.getDepotGPSLocation().getLongitude());
         }
     }
@@ -60,7 +72,7 @@ public class VehicleManager {
                             mileage, latitude, longitude,
                             loadSpace));
                 }
-                else if (type.equalsIgnoreCase("Car")) {
+                else if (type.equalsIgnoreCase("Car") || type.equalsIgnoreCase("4x4")) {
                     int numberOfSeats = sc.nextInt();
 
                     // construct a Car object and add it to the passenger list
@@ -208,17 +220,19 @@ public class VehicleManager {
         final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                 + "1. Show all Vehicles\n"
                 + "2. Add Vehicle\n"
-                + "3. Find Vehicle by Type\n"
-                + "4. Find Vehicle by Registration\n"
-                + "5. Exit\n"
+                + "3. Filter Vehicle by Type\n"
+                + "4. Filter Vehicle by Number Of Seats\n"
+                + "5. Find Vehicle by Registration\n"
+                + "6. Exit\n"
 
-                + "Enter Option [1,5]";
+                + "Enter Option [1,6]";
 
         final int SHOW_ALL = 1;
         final int ADD_VEHICLE = 2;
-        final int FIND_BY_TYPE = 3;
-        final int FIND_BY_REGISTRATION = 4;
-        final int EXIT = 5;
+        final int FILTER_BY_TYPE = 3;
+        final int FILTER_BY_NUMBER_OF_SEATS = 4;
+        final int FIND_BY_REGISTRATION = 5;
+        final int EXIT = 6;
 
         ArrayList<Vehicle> vehicles;
 
@@ -238,15 +252,29 @@ public class VehicleManager {
                         System.out.println("Add Vehicle Chosen");
                         addVehicleMenu();
                         break;
-                    case FIND_BY_TYPE:
-                        System.out.println("Find Vehicles by Type");
-                        System.out.println("Enter Vehicle Type: ");
-                        String type = keyboard.nextLine();
-                        vehicles = findVehiclesByType(type);
-                        if (vehicles == null)
-                            System.out.println("No Vehicles matching the type \"" + type + "\"");
-                        else
-                            System.out.println("Found Vehicle: \n" + vehicles);
+                    case FILTER_BY_TYPE:
+//                        System.out.println("Find Vehicles by Type");
+//                        System.out.println("Enter Vehicle Type: ");
+//                        String type = keyboard.nextLine();
+//                        vehicles = findVehiclesByType(type);
+//                        if (vehicles == null)
+//                            System.out.println("No Vehicles matching the type \"" + type + "\"");
+//                        else
+//                            System.out.println("Found Vehicle: \n" + vehicles);
+//                        break;
+                        System.out.println("Filter by Vehicle type...");
+                        System.out.println("Enter Type to filter by: ");
+                        String filterType = keyboard.nextLine();
+                        List<Vehicle> typeList = filterBy(new VehicleTypeFilter(filterType));
+                        displayFilteredVehicles(typeList);
+
+                        break;
+                    case FILTER_BY_NUMBER_OF_SEATS:
+                        System.out.println("Filter by Number of Seats...");
+                        System.out.println("Enter Number of Seats to filter by: ");
+                        int filterSeats = keyboard.nextInt();
+                        List<Vehicle> seatList = filterBy(new SeatFilter(filterSeats));
+                        displayFilteredVehicles(seatList);
                         break;
                     case FIND_BY_REGISTRATION:
                         System.out.println("Find Vehicles by Registration");
@@ -322,6 +350,26 @@ public class VehicleManager {
         } catch (InputMismatchException | NumberFormatException e) {
             System.out.print("Invalid option - please enter valid details");
         }
+    }
+
+
+
+
+
+    /**
+     * @param filter - a filter object that implements the IFilter interface
+     *               and thus has a matches() method to match two Products
+     * @return a list of objects that matched based on the filter's match() method
+     */
+    public List<Vehicle> filterBy(IFilter filter)            // I stands for Interface
+    {
+        List<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : this.vehicleList) {
+            if (filter.matches(v))    // use matches() method of the filter to match products
+                filteredList.add(v);
+        }
+
+        return filteredList;
     }
 
 }
